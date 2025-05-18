@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Moonfox Creations</title>
   <style>
     body {
@@ -16,7 +16,7 @@
       background-color: #d49d9d;
       padding: 1rem;
       text-align: left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
@@ -57,7 +57,7 @@
       background: rgb(37, 46, 167));
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
@@ -83,7 +83,8 @@
       flex-direction: column;
     }
 
-    .contact input, .contact textarea {
+    .contact input,
+    .contact textarea {
       margin-bottom: 1rem;
       padding: 0.75rem;
       border: 1px solid #ccc;
@@ -126,46 +127,47 @@
       width: 40px;
       height: 40px;
     }
+
     .logo {
-  width: 300px;
-  height: auto;
-  margin-bottom: 1rem;
-}
+      width: 300px;
+      height: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.75));
+      /* Glow effect added */
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Moonfox Creations</h1>
     <nav>
-      <a href="#Candles">Home</a>
-      <a href="#Soaps">Products</a>
-      <a href="#Dress">About</a>
-      <a href="#Creative Design">Contact</a>
+      <a href="candles.html">Home</a>
+      <a href="candles.html">Candles</a>
+      <a href="soaps.html">Soaps</a>
+      <a href="dress.html">Dress</a>
+      <a href="creative-design.html">Creative Design</a>
     </nav>
   </header>
 
   <section class="hero" id="home">
-    <img 
-  src="https://raw.githubusercontent.com/Mr-moonfox/images/ae4f01f9d4ac6ce9a6bd7285deba41d400b12183/logo.png" 
-  alt="Moonfox Logo"
-  class="logo"
->
+    <img src="https://raw.githubusercontent.com/Mr-moonfox/images/ae4f01f9d4ac6ce9a6bd7285deba41d400b12183/logo.png"
+      alt="Moonfox Logo" class="logo">
     <h2>Welcome to Moonfox Creations</h2>
     <p>Handcrafted designs, candles, soaps, and more.</p>
   </section>
   <section class="gallery" id="products">
     <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+1" alt="Product 1"/>
+      <img src="https://via.placeholder.com/300x200?text=Product+1" alt="Product 1" />
       <h3>T-shirt Design</h3>
       <p>₹499</p>
     </div>
     <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+2" alt="Product 2"/>
+      <img src="https://via.placeholder.com/300x200?text=Product+2" alt="Product 2" />
       <h3>Candle</h3>
       <p>₹299</p>
     </div>
     <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+3" alt="Product 3"/>
+      <img src="https://via.placeholder.com/300x200?text=Product+3" alt="Product 3" />
       <h3>Soap Bar</h3>
       <p>₹199</p>
     </div>
@@ -187,16 +189,16 @@
   </footer>
 
   <div class="social-icons">
-    <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products" target="_blank">
-  <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp"/>
-</a>
+    <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products"
+      target="_blank">
+      <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp" />
+    </a>
     </a>
     <a href="https://instagram.com/moon_fox_creations" target="_blank">
-      <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram"/>
+      <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram" />
     </a>
   </div>
 
-  <!-- AJAX Script for contact form -->
   <script>
     const form = document.getElementById("contact-form");
     const status = document.getElementById("form-status");
