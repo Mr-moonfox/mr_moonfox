@@ -1,228 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moonfox Creations</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #fcf8f8;
-      color: #333;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moonfox Creations</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #fcf8f8;
+            color: #333;
+        }
 
-    header {
-      background-color: #d49d9d;
-      padding: 1rem;
-      text-align: left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+        header {
+            background-color: #d49d9d;
+            padding: 1rem;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-    header h1 {
-      font-size: 2rem;
-      margin: 0;
-    }
+        header h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 1rem;
-    }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
 
-    nav a {
-      text-decoration: none;
-      color: #555;
-      font-weight: bold;
-    }
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+        }
 
-    .hero {
-      padding: 2rem;
-      text-align: center;
-      background-image: url('https://via.placeholder.com/1200x400?text=Moonfox+Creations');
-      background-size: cover;
-      background-position: center;
-      color: rgb(236, 52, 52);
-    }
+        .hero {
+            padding: 2rem;
+            text-align: center;
+            background-image: url('https://via.placeholder.com/1200x400?text=Moonfox+Creations');
+            background-size: cover;
+            background-position: center;
+            color: rgb(236, 52, 52);
+        }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      padding: 2rem;
-    }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+        }
 
-    .product {
-      background: rgb(37, 46, 167));
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: center;
-    }
+        .product {
+            background: rgb(37, 46, 167));
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-    .product img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;        }
 
-    .product h3 {
-      margin: 0.5rem 0;
-    }
 
-    .contact {
-      padding: 2rem;
-      background: #ec9e9e;
-    }
+       .product img:nth-child(odd) {
+             transform: translateX(-50%);
+        }
 
-    .contact form {
-      max-width: 500px;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-    }
+        .product img:nth-child(even) {
+            transform: translateX(50%);
+        }
 
-    .contact input, .contact textarea {
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+        .product h3 {
+            margin: 0.5rem 0;
+        }
 
-    .contact button {
-      padding: 0.75rem;
-      background: #333;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        .contact {
+            padding: 2rem;
+            background: #ec9e9e;
+        }
 
-    #form-status {
-      margin-top: 0.5rem;
-      text-align: center;
-      font-weight: bold;
-      color: green;
-    }
+        .contact form {
+            max-width: 500px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
 
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #333;
-      color: white;
-    }
+        .contact input,
+        .contact textarea {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-    .social-icons {
-      position: fixed;
-      right: 1rem;
-      bottom: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+        .contact button {
+            padding: 0.75rem;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    .social-icons a img {
-      width: 40px;
-      height: 40px;
-    }
-    .logo {
+        #form-status {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #333;
+            color: white;
+        }
+
+        .social-icons {
+            position: fixed;
+            right: 1rem;
+            bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .social-icons a img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo {
   width: 300px;
   height: auto;
   margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.75)); /* Glow effect */
 }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Moonfox Creations</h1>
-    <nav>
-      <a href="#AboutUs.html">AboutUs</a>
-      <a href="candles.html">Candles</a>
-      <a href="#Soaps">Soaps</a>
-      <a href="#Dress">Dress</a>
-      <a href="#Creative Design">Creative Design</a>
-    </nav>
-  </header>
+        }
+.gallery.slide-in .product img {
+    opacity: 1;
+    transform: translateX(0);
+  }
+    </style>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const gallery = document.getElementById('products');
+    const productImages = gallery.querySelectorAll('.product img');
 
-  <section class="hero" id="home">
-    <img 
-  src="https://raw.githubusercontent.com/Mr-moonfox/images/ae4f01f9d4ac6ce9a6bd7285deba41d400b12183/logo.png" 
-  alt="Moonfox Logo"
-  class="logo"
->
-    <h2>Welcome to Moonfox Creations</h2>
-    <p>Handcrafted designs, candles, soaps, and more.</p>
-  </section>
-  <section class="gallery" id="products">
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+1" alt="Product 1"/>
-      <h3>T-shirt Design</h3>
-      <p>₹499</p>
-    </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+2" alt="Product 2"/>
-      <h3>Candle</h3>
-      <p>₹299</p>
-    </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200?text=Product+3" alt="Product 3"/>
-      <h3>Soap Bar</h3>
-      <p>₹199</p>
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <h2>Contact Us</h2>
-    <form id="contact-form">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Your Email" required />
-      <textarea name="message" placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-      <p id="form-status"></p>
-    </form>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Moonfox Creations</p>
-  </footer>
-
-  <div class="social-icons">
-    <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products" target="_blank">
-  <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp"/>
-</a>
-    </a>
-    <a href="https://instagram.com/moon_fox_creations" target="_blank">
-      <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram"/>
-    </a>
-  </div>
-
-  <!-- AJAX Script for contact form -->
-  <script>
-    const form = document.getElementById("contact-form");
-    const status = document.getElementById("form-status");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      try {
-        const res = await fetch("https://formspree.io/f/mnndwloy", {
-          method: "POST",
-          body: data,
-          headers: {
-            'Accept': 'application/json'
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateX(0)';
           }
         });
-        if (res.ok) {
-          status.textContent = "Thanks! Your message was sent.";
-          form.reset();
-        } else {
-          status.textContent = "Oops! Something went wrong.";
-        }
-      } catch (err) {
-        status.textContent = "Error sending form.";
+      },
+      {
+        threshold: 0.2,
       }
-    });
-  </script>
+    );
+
+    productImages.forEach((img) => observer.observe(img));
+  });
+</script>
+</head>
+<body>
+    <header>
+        <h1>Moonfox Creations</h1>
+        <nav>
+            <a href="About us.html">About us</a>
+            <a href="candles.html">Candles</a>
+            <a href="#Soaps">Soaps</a>
+            <a href="#Dress">Dress</a>
+            <a href="#Creative Design">Creative Design</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <img src="https://raw.githubusercontent.com/Mr-moonfox/images/ae4f01f9d4ac6ce9a6bd7285deba41d400b12183/logo.png"
+            alt="Moonfox Logo" class="logo" />
+        <h2>Welcome to Moonfox Creations</h2>
+        <p>Handcrafted designs, candles, soaps, and more.</p>
+    </section>
+    <section class="gallery" id="products">
+        <div class="product">
+            <img src="https://via.placeholder.com/300x200?text=Product+1" alt="Product 1" />
+            <h3>T-shirt Design</h3>
+            <p>₹499</p>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/300x200?text=Product+2" alt="Product 2" />
+            <h3>Candle</h3>
+            <p>₹299</p>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/300x200?text=Product+3" alt="Product 3" />
+            <h3>Soap Bar</h3>
+            <p>₹199</p>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send</button>
+            <p id="form-status"></p>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Moonfox Creations</p>
+    </footer>
+
+    <div class="social-icons">
+        <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products"
+            target="_blank">
+            <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp" />
+        </a>
+        </a>
+        <a href="https://instagram.com/moon_fox_creations" target="_blank">
+            <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram" />
+        </a>
+    </div>
+
+    <script>
+        const form = document.getElementById("contact-form");
+        const status = document.getElementById("form-status");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+            try {
+                const res = await fetch("https://formspree.io/f/mnndwloy", {
+                    method: "POST",
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                if (res.ok) {
+                    status.textContent = "Thanks! Your message was sent.";
+                    form.reset();
+                } else {
+                    status.textContent = "Oops! Something went wrong.";
+                }
+            } catch (err) {
+                status.textContent = "Error sending form.";
+            }
+        });
+    </script>
 </body>
 </html>
