@@ -13,7 +13,7 @@
     }
 
     header {
-      background-color: #eeb3b3;
+      background-color: #fff;
       padding: 1rem;
       text-align: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -43,7 +43,7 @@
       background-image: url('https://via.placeholder.com/1200x400?text=Moonfox+Creations');
       background-size: cover;
       background-position: center;
-      color: rgb(228, 71, 71);
+      color: white;
     }
 
     .gallery {
@@ -97,6 +97,13 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+    }
+
+    #form-status {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-weight: bold;
+      color: green;
     }
 
     footer {
@@ -157,11 +164,12 @@
 
   <section class="contact" id="contact">
     <h2>Contact Us</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <textarea rows="4" placeholder="Your Message" required></textarea>
+    <form id="contact-form">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" placeholder="Your Message" required></textarea>
       <button type="submit">Send</button>
+      <p id="form-status"></p>
     </form>
   </section>
 
@@ -176,7 +184,10 @@
     <a href="https://instagram.com/moonfox.creations" target="_blank">
       <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram"/>
     </a>
-    <script>
+  </div>
+
+  <!-- AJAX Script for contact form -->
+  <script>
     const form = document.getElementById("contact-form");
     const status = document.getElementById("form-status");
 
@@ -187,7 +198,9 @@
         const res = await fetch("https://formspree.io/f/mnndwloy", {
           method: "POST",
           body: data,
-          headers: { 'Accept': 'application/json' }
+          headers: {
+            'Accept': 'application/json'
+          }
         });
         if (res.ok) {
           status.textContent = "Thanks! Your message was sent.";
@@ -200,6 +213,5 @@
       }
     });
   </script>
-  </div>
 </body>
 </html>
