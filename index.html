@@ -1,265 +1,969 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Moonfox Creations</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Showcase Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Custom CSS for animations */
         body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #fcf8f8;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll due to animations */
+            /* Animated background properties */
+            /* Define a very wide gradient with multiple pink shades */
+            background: linear-gradient(270deg, #ff69b4, #ffc0cb, #ffb6c1, #ff85a2, #ffccd5, #ffb6c1, #ffc0cb, #ff69b4);
+            background-size: 400% 100%; /* Make the gradient much wider than the viewport */
+            animation: background-pan 10s linear infinite; /* Apply the animation, linear for smooth transition, now 10 seconds */
         }
 
-        header {
-            background-color: #d49d9d;
-            padding: 1rem;
-            text-align: left;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Background animation keyframes for smooth panning */
+        @keyframes background-pan {
+            0% {
+                background-position: 0% 50%; /* Start from the left of the wide gradient */
+            }
+            100% {
+                background-position: 100% 50%; /* Pan across to the right of the wide gradient */
+            }
         }
 
-        header h1 {
-            font-size: 2rem;
-            margin: 0;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: bold;
-        }
-
-        .hero {
-            padding: 2rem;
-            text-align: center;
-            background-image: url('https://via.placeholder.com/1200x400?text=Moonfox+Creations');
-            background-size: cover;
-            background-position: center;
-            color: rgb(236, 52, 52);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            padding: 2rem;
-        }
-
-        .product {
-            background: rgb(37, 46, 167));
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .product img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+        /* Page transition animation */
+        .page-section {
             opacity: 0;
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out;        }
-
-
-       .product img:nth-child(odd) {
-             transform: translateX(-50%);
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            display: none; /* Hidden by default */
+            min-height: calc(100vh - 80px); /* Adjust for fixed header height */
+            padding-top: 80px; /* Space for fixed header */
+            flex-direction: column; /* Ensure content is stacked vertically */
+            align-items: center; /* Center content horizontally */
+            justify-content: center; /* Center content vertically */
+            position: absolute; /* Position pages absolutely to stack them */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto; /* Allow scrolling within page if content overflows */
         }
 
-        .product img:nth-child(even) {
-            transform: translateX(50%);
+        .page-section.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: flex; /* Show active page */
+            position: relative; /* Take up space when active */
         }
 
-        .product h3 {
-            margin: 0.5rem 0;
+        /* Scroll-triggered Fade-in animation for elements within active page */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
-        .contact {
-            padding: 2rem;
-            background: #ec9e9e;
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .contact form {
-            max-width: 500px;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
+        /* Scale-up on hover for cards */
+        .card-scale:hover {
+            transform: scale(1.03);
         }
 
-        .contact input,
-        .contact textarea {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        /* Button hover effect */
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-        .contact button {
-            padding: 0.75rem;
-            background: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
+        .btn-primary:hover {
+            background-color: #4a5568; /* Darker gray */
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Simple rotation animation for an icon */
+        .rotate-on-hover {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .rotate-on-hover:hover {
+            transform: rotate(15deg);
+        }
+
+        /* Custom animation for background elements */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 15s linear infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+        .animate-pulse {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Logo Bounce Animation */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .animate-bounce-logo {
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        /* Logo Glow Animation */
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3); /* Initial glow */
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 30px rgba(99, 102, 241, 0.6); /* Stronger glow */
+            }
+        }
+        .animate-glow-logo {
+            border-radius: 9999px; /* Ensure rounded corners for the glow */
+            animation: glow-pulse 2s infinite ease-in-out;
+        }
+
+        /* Social Icon Hover Effect */
+        .social-icon:hover {
+            transform: scale(1.1);
+            color: #6366f1; /* Indigo-500 */
+        }
+
+        /* Image Zoom Effect */
+        .zoomable-image {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Default shadow */
+            border-radius: 0.75rem; /* rounded-xl equivalent */
+            overflow: hidden; /* Ensures content stays within rounded corners */
         }
 
-        #form-status {
-            margin-top: 0.5rem;
-            text-align: center;
-            font-weight: bold;
-            color: green;
+        .zoomable-image.zoomed {
+            transform: scale(1.1); /* Zoom in effect */
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.6), 0 0 30px rgba(99, 102, 241, 0.4); /* Enhanced shadow/glow */
+            z-index: 10; /* Bring to front when zoomed */
+            position: relative; /* Ensure z-index works */
         }
 
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: #333;
-            color: white;
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #6366f1; /* Blue */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
         }
 
-        .social-icons {
-            position: fixed;
-            right: 1rem;
-            bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .social-icons a img {
-            width: 40px;
-            height: 40px;
+        /* Thank You Message Animation */
+        @keyframes slide-in-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-in-fade-in {
+            animation: slide-in-fade-in 0.5s ease-out forwards;
         }
 
-        .logo {
-  width: 300px;
-  height: auto;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.75)); /* Glow effect */
-}
+        /* Coin Spin Animation for About Us Logo */
+        @keyframes spin-once {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); } /* Rotate around Y-axis for coin spin */
         }
-.gallery.slide-in .product img {
-    opacity: 1;
-    transform: translateX(0);
-  }
+        .logo-spin-on-touch {
+            animation: spin-once 0.8s ease-out; /* Adjust duration and timing as needed */
+        }
+
+        /* Navigation Link Glow and Hover Animation */
+        .nav-link {
+            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #a78bfa; /* A lighter purple for hover */
+            text-shadow: 0 0 8px #a78bfa, 0 0 15px #a78bfa; /* Glow effect */
+            transform: scale(1.05); /* Slight scale up */
+        }
+
+        /* Social Icons specific styling */
+        .social-icons img {
+            width: 48px; /* Adjust size as needed */
+            height: 48px;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 50%; /* Make them rounded if desired */
+        }
+
+        .social-icons a:hover img {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+        }
     </style>
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const gallery = document.getElementById('products');
-    const productImages = gallery.querySelectorAll('.product img');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateX(0)';
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-      }
-    );
-
-    productImages.forEach((img) => observer.observe(img));
-  });
-</script>
 </head>
-<body>
-    <header>
-        <h1>Moonfox Creations</h1>
-        <nav>
-            <a href="About us.html">About us</a>
-            <a href="candles.html">Candles</a>
-            <a href="#Soaps">Soaps</a>
-            <a href="#Dress">Dress</a>
-            <a href="#Creative Design">Creative Design</a>
+<body class="bg-gray-900 text-gray-100">
+
+    <header class="w-full p-4 bg-gray-800 shadow-lg fixed top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="text-xl font-bold text-indigo-400 rounded-md p-2 hover:bg-gray-700 transition duration-300">Moon Fox Creations</a>
+            <ul class="flex space-x-6">
+                <li><a href="#home" class="nav-link text-lg font-medium hover:text-indigo-400 transition duration-300 rounded-md p-2">Home</a></li>
+                <li><a href="#candle" class="nav-link text-lg font-medium hover:text-indigo-400 transition duration-300 rounded-md p-2">Candles</a></li>
+                <li><a href="#products" class="nav-link text-lg font-medium hover:text-indigo-400 transition duration-300 rounded-md p-2">Products</a></li>
+                <li><a href="#about" class="nav-link text-lg font-medium hover:text-indigo-400 transition duration-300 rounded-md p-2">About Us</a></li>
+                <li><a href="#contact" class="nav-link text-lg font-medium hover:text-indigo-400 transition duration-300 rounded-md p-2">Contact</a></li>
+            </ul>
         </nav>
     </header>
 
-    <section class="hero" id="home">
-        <img src="https://raw.githubusercontent.com/Mr-moonfox/images/ae4f01f9d4ac6ce9a6bd7285deba41d400b12183/logo.png"
-            alt="Moonfox Logo" class="logo" />
-        <h2>Welcome to Moonfox Creations</h2>
-        <p>Handcrafted designs, candles, soaps, and more.</p>
-    </section>
-    <section class="gallery" id="products">
-        <div class="product">
-            <img src="https://via.placeholder.com/300x200?text=Product+1" alt="Product 1" />
-            <h3>T-shirt Design</h3>
-            <p>₹499</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300x200?text=Product+2" alt="Product 2" />
-            <h3>Candle</h3>
-            <p>₹299</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300x200?text=Product+3" alt="Product 3" />
-            <h3>Soap Bar</h3>
-            <p>₹199</p>
-        </div>
-    </section>
+    <main class="w-full relative min-h-screen">
+        <section id="home" class="page-section relative w-full bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-48 h-48 bg-indigo-500 rounded-full mix-blend-lighten opacity-20 animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500 rounded-lg mix-blend-lighten opacity-20 animate-spin-slow"></div>
 
-    <section class="contact" id="contact">
-        <h2>Contact Us</h2>
-        <form id="contact-form">
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input type="email" name="email" placeholder="Your Email" required />
-            <textarea name="message" placeholder="Your Message" required></textarea>
-            <button type="submit">Send</button>
-            <p id="form-status"></p>
-        </form>
-    </section>
+            <div class="text-center z-10 p-6 rounded-xl bg-gray-800 bg-opacity-70 shadow-2xl fade-in-element">
+                <img src="https://github.com/Mr-moonfox/images/blob/main/logo.png?raw=true" alt="Your Company Logo" class="mx-auto mb-8 w-48 h-48 md:w-64 md:h-64 object-contain animate-bounce-logo animate-glow-logo">
 
-    <footer>
-        <p>&copy; 2025 Moonfox Creations</p>
+                <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+                    Moon Fox Creations
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Discover innovative solutions and bring your ideas to life with our cutting-edge platform.
+                </p>
+                <div class="flex justify-center space-x-6 mt-8 social-icons">
+                    <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener noreferrer">
+                        <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp" onerror="this.onerror=null;this.src='https://placehold.co/48x48/000000/ffffff?text=WA';"/>
+                    </a>
+                    <a href="https://instagram.com/moon_fox_creations" target="_blank" rel="noopener noreferrer">
+                        <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram" onerror="this.onerror=null;this.src='https://placehold.co/48x48/000000/ffffff?text=IG';"/>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="candle" class="page-section w-full py-20 bg-gray-900">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-indigo-300 fade-in-element">Our Candle Collection</h2>
+
+                <div class="max-w-xl mx-auto bg-gray-800 p-8 rounded-xl shadow-2xl mb-12 fade-in-element">
+                    <h3 class="text-2xl font-semibold mb-4 text-indigo-200 text-center">✨ Suggest a Scent</h3>
+                    <p class="text-gray-300 mb-4 text-center">Tell us a mood, and we'll suggest a candle scent!</p>
+                    <input type="text" id="moodInput" placeholder="e.g., 'cozy evening', 'refreshing morning'" class="w-full p-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 mb-4">
+                    <button id="generateScentBtn" class="btn-primary bg-purple-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 w-full flex items-center justify-center">
+                        ✨ Suggest Candle Scent
+                        <span id="scentLoader" class="loader hidden"></span>
+                    </button>
+                    <div id="scentOutput" class="mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element">
+                        <p class="font-semibold mb-2">Suggested Scent:</p>
+                        <p id="scentName" class="text-indigo-300 text-xl"></p>
+                        <p id="scentDescription" class="text-gray-300 text-base mt-2"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+1" alt="Candle 1" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Lavender Serenity</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.1s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+2" alt="Candle 2" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Vanilla Dream</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.2s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+3" alt="Candle 3" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Forest Breeze</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.3s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+4" alt="Candle 4" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Citrus Burst</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.4s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+5" alt="Candle 5" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Ocean Mist</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.5s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+6" alt="Candle 6" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Spiced Apple</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.6s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+7" alt="Candle 7" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Warm Cinnamon</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.7s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+8" alt="Candle 8" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Eucalyptus Mint</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.8s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+9" alt="Candle 9" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Rose Garden</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-xl fade-in-element zoomable-image" style="transition-delay: 0.9s;">
+                        <img src="https://placehold.co/400x200/2d3748/a0aec0?text=Candle+10" alt="Candle 10" class="w-full h-32 object-cover rounded-lg mb-4">
+                        <p class="text-gray-300 text-center font-medium">Sandalwood Spice</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-16 text-indigo-300 fade-in-element">Our Products</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+                    <a href="#product-detail-1" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+1" alt="Product 1" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-indigo-200 group-hover:text-indigo-400 transition duration-300">Amazing Gadget Pro</h3>
+                        <p class="text-gray-400 text-sm mb-4">A revolutionary device for enhanced productivity and entertainment.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$199.99</span>
+                    </a>
+                    <a href="#product-detail-2" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.1s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+2" alt="Product 2" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-purple-200 group-hover:text-purple-400 transition duration-300">Smart Home Hub</h3>
+                        <p class="text-gray-400 text-sm mb-4">Control all your smart devices with a single, intuitive hub.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$89.50</span>
+                    </a>
+                    <a href="#product-detail-3" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.2s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+3" alt="Product 3" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-yellow-200 group-hover:text-yellow-400 transition duration-300">Ergonomic Keyboard</h3>
+                        <p class="text-gray-400 text-sm mb-4">Designed for comfort and efficiency, reducing strain during long sessions.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$75.00</span>
+                    </a>
+                    <a href="#product-detail-4" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.3s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+4" alt="Product 4" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-red-200 group-hover:text-red-400 transition duration-300">Wireless Mouse</h3>
+                        <p class="text-gray-400 text-sm mb-4">Precision and comfort in a sleek, wireless design.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$35.99</span>
+                    </a>
+                    <a href="#product-detail-5" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.4s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+5" alt="Product 5" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-200 group-hover:text-blue-400 transition duration-300">Portable SSD</h3>
+                        <p class="text-gray-400 text-sm mb-4">Fast and reliable storage for all your important files on the go.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$120.00</span>
+                    </a>
+                    <a href="#product-detail-6" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.5s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+6" alt="Product 6" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-teal-200 group-hover:text-teal-400 transition duration-300">Noise-Cancelling Headphones</h3>
+                        <p class="text-gray-400 text-sm mb-4">Immersive audio experience with superior noise cancellation.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$249.00</span>
+                    </a>
+                    <a href="#product-detail-7" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.6s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+7" alt="Product 7" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-orange-200 group-hover:text-orange-400 transition duration-300">Smartwatch Elite</h3>
+                        <p class="text-gray-400 text-sm mb-4">Track your fitness and stay connected with this elegant smartwatch.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$299.00</span>
+                    </a>
+                    <a href="#product-detail-8" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.7s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+8" alt="Product 8" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-pink-200 group-hover:text-pink-400 transition duration-300">Portable Projector</h3>
+                        <p class="text-gray-400 text-sm mb-4">Turn any wall into a big screen with this compact projector.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$349.00</span>
+                    </a>
+                    <a href="#product-detail-9" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.8s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+9" alt="Product 9" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-cyan-200 group-hover:text-cyan-400 transition duration-300">Gaming Headset</h3>
+                        <p class="text-gray-400 text-sm mb-4">Immersive sound and crystal-clear communication for gamers.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$129.99</span>
+                    </a>
+                    <a href="#product-detail-10" class="group bg-gray-800 p-6 rounded-xl shadow-xl card-scale fade-in-element flex flex-col items-center justify-between" style="transition-delay: 0.9s;">
+                        <img src="https://placehold.co/600x300/2d3748/a0aec0?text=Product+10" alt="Product 10" class="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2 text-lime-200 group-hover:text-lime-400 transition duration-300">Smart Coffee Maker</h3>
+                        <p class="text-gray-400 text-sm mb-4">Brew your perfect coffee from anywhere with smart controls.</p>
+                        <span class="block text-xl font-bold text-green-400 mt-auto">$149.00</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="product-detail-1" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 1</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+1+Detail" alt="Product 1 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    This is a detailed description of Amazing Gadget Pro. It features advanced technology, sleek design, and unparalleled performance.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Amazing Gadget Pro">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-2" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 2</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+2+Detail" alt="Product 2 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Explore the features of the Smart Home Hub. It seamlessly integrates with various smart devices to simplify your life.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Smart Home Hub">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-3" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 3</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+3+Detail" alt="Product 3 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Dive deeper into the Ergonomic Keyboard. Its design prioritizes comfort and reduces strain for extended use.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Ergonomic Keyboard">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-4" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 4</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+4+Detail" alt="Product 4 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Learn about the Wireless Mouse. Enjoy precise tracking and comfortable grip for all your computing needs.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Wireless Mouse">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-5" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 5</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+5+Detail" alt="Product 5 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Discover the Portable SSD. High-speed data transfer and robust durability in a compact form factor.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Portable SSD">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-6" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 6</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+6+Detail" alt="Product 6 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Experience the Noise-Cancelling Headphones. Immerse yourself in pure audio with advanced noise reduction.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Noise-Cancelling Headphones">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-7" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 7</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+7+Detail" alt="Product 7 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Get the full scoop on the Smartwatch Elite. A perfect blend of style, functionality, and smart features.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Smartwatch Elite">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-8" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 8</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+8+Detail" alt="Product 8 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Learn about the Portable Projector. Perfect for presentations, movie nights, and on-the-go entertainment.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Portable Projector">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-9" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 9</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+9+Detail" alt="Product 9 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Discover the ultimate Gaming Headset. Designed for competitive play with superior audio and comfort.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Gaming Headset">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="product-detail-10" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-300 fade-in-element">Detail for Product 10</h2>
+                <img src="https://placehold.co/800x600/2d3748/a0aec0?text=Product+10+Detail" alt="Product 10 Detail" class="max-w-full h-auto rounded-lg shadow-xl mb-8 fade-in-element" style="transition-delay: 0.1s;">
+                <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto fade-in-element" style="transition-delay: 0.2s;">
+                    Uncover the magic of the Smart Coffee Maker. Wake up to freshly brewed coffee, customized to your taste.
+                </p>
+                <button class="btn-primary bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 mt-4 generate-description-btn" data-product-name="Smart Coffee Maker">
+                    ✨ Generate Description
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="generated-description mt-6 p-4 bg-gray-700 rounded-lg text-gray-200 hidden fade-in-element"></div>
+                <a href="#products" class="btn-primary bg-gray-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 mt-8 fade-in-element" style="transition-delay: 0.3s;">
+                    ← Back to Products
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="page-section w-full py-20 bg-gray-900">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-16 text-indigo-300 fade-in-element">About Us</h2>
+                <img id="aboutUsLogo" src="https://github.com/Mr-moonfox/images/blob/main/logo.png?raw=true" alt="Company Logo" class="mx-auto mb-8 w-32 h-32 md:w-40 md:h-40 object-contain rounded-full shadow-lg fade-in-element animate-glow-logo" style="transition-delay: 0.05s;">
+                <div class="max-w-3xl mx-auto text-lg text-gray-300 leading-relaxed space-y-6">
+                    <p class="fade-in-element" style="transition-delay: 0.1s;">
+                        Welcome to MySite, where innovation meets elegance. We are passionate about creating cutting-edge products that enhance your daily life and spark your imagination. Our journey began with a simple idea: to build a platform where creativity knows no bounds.
+                    </p>
+                    <p class="fade-in-element" style="transition-delay: 0.2s;">
+                        Driven by a team of dedicated experts, we strive for excellence in every design, every line of code, and every customer interaction. We believe in the power of technology to transform ideas into reality, making complex tasks simple and enjoyable.
+                    </p>
+                    <p class="fade-in-element" style="transition-delay: 0.3s;">
+                        Our commitment extends beyond just products; we aim to build a community where users can explore, learn, and share their unique experiences. Join us in shaping the future of innovation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page-section w-full py-20 bg-gray-950">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-16 text-indigo-300 fade-in-element">Contact Us</h2>
+
+                <div class="max-w-2xl mx-auto bg-gray-800 p-8 rounded-xl shadow-2xl fade-in-element">
+                    <p class="text-lg text-gray-300 mb-8">
+                        Have a question, feedback, or just want to say hello? Fill out the form below and we'll get back to you as soon as possible.
+                    </p>
+
+                    <form id="contactForm" action="https://formspree.io/f/mnndwloy" method="POST" class="space-y-6 text-left">
+                        <div>
+                            <label for="name" class="block text-gray-300 text-sm font-medium mb-2">Name</label>
+                            <input type="text" id="name" name="name" class="w-full p-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="Your Name" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-300 text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="email" name="email" class="w-full p-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="your.email@example.com" required>
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-gray-300 text-sm font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" class="w-full p-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="Subject of your message" required>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-gray-300 text-sm font-medium mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" class="w-full p-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300" placeholder="Your message..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary bg-indigo-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 w-full flex items-center justify-center">
+                            Send Message
+                            <span id="contactFormLoader" class="loader hidden"></span>
+                        </button>
+                        <div id="formMessage" class="mt-4 p-3 rounded-lg text-center hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="w-full p-8 bg-gray-950 text-center text-gray-500 text-sm">
+        <p>Thanks for visiting!</p>
     </footer>
 
-    <div class="social-icons">
-        <a href="https://wa.me/916384846274?text=Hello%20Moonfox%20Creations%2C%20I%27m%20interested%20in%20your%20products"
-            target="_blank">
-            <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp" />
-        </a>
-        </a>
-        <a href="https://instagram.com/moon_fox_creations" target="_blank">
-            <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram" />
-        </a>
-    </div>
-
     <script>
-        const form = document.getElementById("contact-form");
-        const status = document.getElementById("form-status");
+        // --- Page Navigation and Transitions ---
+        const pageSections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = new FormData(form);
-            try {
-                const res = await fetch("https://formspree.io/f/mnndwloy", {
-                    method: "POST",
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    status.textContent = "Thanks! Your message was sent.";
-                    form.reset();
-                } else {
-                    status.textContent = "Oops! Something went wrong.";
+        // IntersectionObserver for scroll-triggered fade-in animations
+        const observerOptions = {
+            root: null, /* relative to the viewport */
+            rootMargin: '0px',
+            threshold: 0.1 /* 10% of the element must be visible */
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); /* Stop observing once visible */
                 }
-            } catch (err) {
-                status.textContent = "Error sending form.";
-            }
+            });
+        }, observerOptions);
+
+        // Function to show a specific page and hide others
+        function showPage(pageId) {
+            pageSections.forEach(section => {
+                if ('#' + section.id === pageId) {
+                    section.classList.add('active');
+                    // Re-observe elements for fade-in animation on the newly active page
+                    const elementsToAnimate = section.querySelectorAll('.fade-in-element');
+                    elementsToAnimate.forEach(el => {
+                        el.classList.remove('is-visible'); // Reset visibility for re-animation
+                        observer.observe(el);
+                    });
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            // Update active state for navigation links
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === pageId) {
+                    link.classList.add('text-indigo-400');
+                    link.classList.remove('text-gray-100');
+                } else {
+                    link.classList.remove('text-indigo-400');
+                    link.classList.add('text-gray-100');
+                }
+            });
+        }
+
+        // Handle initial page load or hash change
+        function handleHashChange() {
+            const hash = window.location.hash || '#home'; // Default to home page
+            showPage(hash);
+        }
+
+        // Listen for hash changes (e.g., when navigating with browser back/forward)
+        window.addEventListener('hashchange', handleHashChange);
+
+        // Listen for clicks on navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default anchor behavior
+                const targetId = this.getAttribute('href');
+                window.location.hash = targetId; // Update URL hash, which triggers handleHashChange
+            });
         });
+
+        // Initialize the correct page on load
+        handleHashChange();
+
+        // --- Image Zoom Functionality ---
+        const zoomableImages = document.querySelectorAll('.zoomable-image');
+
+        zoomableImages.forEach(imageContainer => {
+            // Use click for desktop and touchend for mobile
+            imageContainer.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent event from bubbling up to parent elements
+                this.classList.toggle('zoomed');
+            });
+            imageContainer.addEventListener('touchend', function(event) {
+                event.preventDefault(); // Prevent click event from firing after touchend
+                event.stopPropagation(); // Prevent event from bubbling up to parent elements
+                this.classList.toggle('zoomed');
+            });
+        });
+
+        // Close zoomed image if clicking anywhere else on the document
+        document.addEventListener('click', function(event) {
+            zoomableImages.forEach(imageContainer => {
+                // If the click is not on a zoomed image, and an image is currently zoomed, unzoom it
+                if (!imageContainer.contains(event.target) && imageContainer.classList.contains('zoomed')) {
+                    imageContainer.classList.remove('zoomed');
+                }
+            });
+        });
+        document.addEventListener('touchend', function(event) {
+            zoomableImages.forEach(imageContainer => {
+                // If the touch is not on a zoomed image, and an image is currently zoomed, unzoom it
+                if (!imageContainer.contains(event.target) && imageContainer.classList.contains('zoomed')) {
+                    imageContainer.classList.remove('zoomed');
+                }
+                // Also prevent default touch behavior (like scrolling) if it was a tap on the image
+                if (event.target === imageContainer) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        // --- Gemini API Integration ---
+
+        // Function to call Gemini API
+        async function callGeminiAPI(prompt, loaderElement, outputElement, schema = null) {
+            loaderElement.classList.remove('hidden');
+            outputElement.classList.add('hidden');
+            outputElement.innerHTML = ''; // Clear previous output
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { contents: chatHistory };
+
+            if (schema) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json",
+                    responseSchema: schema
+                };
+            }
+
+            const apiKey = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+
+                    const text = result.candidates[0].content.parts[0].text;
+
+                    if (schema) {
+                        try {
+                            const parsedJson = JSON.parse(text);
+                            return parsedJson;
+                        } catch (e) {
+                            console.error("Failed to parse JSON response:", e);
+                            return { error: "Failed to parse API response." };
+                        }
+                    } else {
+                        return text;
+                    }
+
+                } else {
+                    return { error: "No content found in API response." };
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return { error: `Failed to generate content: ${error.message}` };
+            } finally {
+                loaderElement.classList.add('hidden');
+            }
+        }
+
+
+        // --- Product Description Generation ---
+        const generateDescriptionButtons = document.querySelectorAll('.generate-description-btn');
+
+        generateDescriptionButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const productName = this.dataset.productName;
+                const loader = this.querySelector('.loader');
+                const outputDiv = this.nextElementSibling; // The div right after the button
+
+                const prompt = `Write a compelling, detailed, and enticing product description for '${productName}'. Focus on its revolutionary technology, sleek design, unparalleled performance, and how it enhances productivity and entertainment. Keep it concise, around 100 words.`;
+
+                const generatedText = await callGeminiAPI(prompt, loader, outputDiv);
+
+                if (generatedText.error) {
+                    outputDiv.innerHTML = `<p class="text-red-400">Error: ${generatedText.error}</p>`;
+                } else {
+                    outputDiv.innerHTML = `<p>${generatedText}</p>`;
+                }
+                outputDiv.classList.remove('hidden');
+            });
+        });
+
+        // --- Candle Scent Suggestion ---
+        const moodInput = document.getElementById('moodInput');
+        const generateScentBtn = document.getElementById('generateScentBtn');
+        const scentLoader = document.getElementById('scentLoader');
+        const scentOutput = document.getElementById('scentOutput');
+        const scentNameElement = document.getElementById('scentName');
+        const scentDescriptionElement = document.getElementById('scentDescription');
+
+        if (generateScentBtn) {
+            generateScentBtn.addEventListener('click', async function() {
+                const mood = moodInput.value.trim();
+                if (!mood) {
+                    scentOutput.innerHTML = `<p class="text-red-400">Please enter a mood!</p>`;
+                    scentOutput.classList.remove('hidden');
+                    return;
+                }
+
+                const prompt = `Generate a unique candle scent combination and a short, enticing description (around 50 words) for a candle that evokes a '${mood}' feeling. Provide the scent name and description in JSON format with keys "scentName" and "scentDescription".`;
+
+                const schema = {
+                    type: "OBJECT",
+                    properties: {
+                        "scentName": { "type": "STRING" },
+                        "scentDescription": { "type": "STRING" }
+                    },
+                    required: ["scentName", "scentDescription"]
+                };
+
+                const generatedScent = await callGeminiAPI(prompt, scentLoader, scentOutput, schema);
+
+                if (generatedScent.error) {
+                    scentOutput.innerHTML = `<p class="text-red-400">Error: ${generatedScent.error}</p>`;
+                } else if (generatedScent.scentName && generatedScent.scentDescription) {
+                    scentNameElement.textContent = generatedScent.scentName;
+                    scentDescriptionElement.textContent = generatedScent.scentDescription;
+                } else {
+                     scentOutput.innerHTML = `<p class="text-red-400">Could not generate scent. Please try again.</p>`;
+                }
+                scentOutput.classList.remove('hidden');
+            });
+        }
+
+        // --- Contact Form Submission with Formspree and Animation ---
+        const contactForm = document.getElementById('contactForm');
+        const contactFormLoader = document.getElementById('contactFormLoader');
+        const formMessage = document.getElementById('formMessage');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                contactFormLoader.classList.remove('hidden');
+                formMessage.classList.add('hidden');
+                formMessage.textContent = ''; // Clear previous message
+                formMessage.classList.remove('animate-slide-in-fade-in'); // Reset animation
+
+                const formData = new FormData(contactForm);
+                const formspreeEndpoint = contactForm.action; // Get the Formspree URL from the form's action attribute
+
+                try {
+                    const response = await fetch(formspreeEndpoint, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' // Important for Formspree to return JSON instead of redirecting
+                        }
+                    });
+
+                    if (response.ok) { // Formspree returns a 200 OK on successful submission
+                        formMessage.textContent = 'Thank you for your message! We will get back to you shortly.';
+                        formMessage.classList.remove('bg-red-700', 'text-red-100');
+                        formMessage.classList.add('bg-green-700', 'text-green-100');
+                        contactForm.reset(); // Clear the form fields
+                        formMessage.classList.remove('hidden');
+                        formMessage.classList.add('animate-slide-in-fade-in'); // Add animation class
+                    } else {
+                        // Handle Formspree errors (e.g., rate limiting, invalid setup)
+                        const errorData = await response.json();
+                        let errorMessage = 'There was an error sending your message. Please try again later.';
+                        if (errorData.errors && errorData.errors.length > 0) {
+                            errorMessage = errorData.errors.map(err => err.message).join(', ');
+                        }
+                        formMessage.textContent = errorMessage;
+                        formMessage.classList.remove('bg-green-700', 'text-green-100');
+                        formMessage.classList.add('bg-red-700', 'text-red-100');
+                        formMessage.classList.remove('hidden');
+                        formMessage.classList.add('animate-slide-in-fade-in'); // Add animation class
+                    }
+                } catch (error) {
+                    console.error("Error submitting form:", error);
+                    formMessage.textContent = 'Network error. Please check your internet connection and try again.';
+                    formMessage.classList.remove('bg-green-700', 'text-green-100');
+                    formMessage.classList.add('bg-red-700', 'text-red-100');
+                    formMessage.classList.remove('hidden');
+                    formMessage.classList.add('animate-slide-in-fade-in'); // Add animation class
+                } finally {
+                    contactFormLoader.classList.add('hidden');
+                }
+            });
+        }
+
+        // --- About Us Logo Spin on Touch/Click ---
+        const aboutUsLogo = document.getElementById('aboutUsLogo');
+
+        if (aboutUsLogo) {
+            // Function to add the spin animation
+            function addSpinAnimation() {
+                aboutUsLogo.classList.add('logo-spin-on-touch');
+            }
+
+            // Function to remove the spin animation after it completes
+            function removeSpinAnimation() {
+                aboutUsLogo.classList.remove('logo-spin-on-touch');
+            }
+
+            // Add event listener for click (desktop)
+            aboutUsLogo.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent event from bubbling up
+                removeSpinAnimation(); // Ensure it's reset before adding again
+                addSpinAnimation();
+            });
+
+            // Add event listener for touch (mobile)
+            aboutUsLogo.addEventListener('touchend', function(event) {
+                event.preventDefault(); // Prevent default touch behavior (like scrolling)
+                event.stopPropagation(); // Prevent event from bubbling up
+                removeSpinAnimation(); // Ensure it's reset before adding again
+                addSpinAnimation();
+            });
+
+            // Listen for the animation to end so we can remove the class
+            aboutUsLogo.addEventListener('animationend', removeSpinAnimation);
+        }
     </script>
 </body>
 </html>
